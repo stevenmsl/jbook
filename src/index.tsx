@@ -2,6 +2,7 @@ import ReactDom from "react-dom";
 import { useState, useEffect, useRef } from "react";
 import * as esbuild from "esbuild-wasm";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
+import { fetchPlugin } from "./plugins/fetch-plugin";
 
 const App = () => {
   const ref = useRef<any>();
@@ -10,17 +11,17 @@ const App = () => {
 
   const startService = async () => {
     /*
-       - make sure the version is 0.8.27 
-         for "esbuild-wasm" for the following
-         code to work
        - copy the esbuild.wasm from the node_modules
          to the public folder
-       - use useRef so the service can be accessed later
+       - use useRef to check if the esbuild 
+         is ready later
     */
-    ref.current = await esbuild.startService({
+    await esbuild.initialize({
       worker: true,
       wasmURL: "/esbuild.wasm",
     });
+
+    ref.current = true;
   };
 
   useEffect(() => {
@@ -31,17 +32,11 @@ const App = () => {
     if (!ref.current) {
       return;
     }
-
-    // const result = await ref.current.transform(input, {
-    //   loader: "jsx",
-    //   target: "es2015",
-    // });
-
-    const result = await ref.current.build({
+    const result = await esbuild.build({
       entryPoints: ["index.js"],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()],
+      plugins: [unpkgPathPlugin(), fetchPlugin(input)],
       /*
         - deal with the warnnings when the packages
           you are downloading need to access nodejs
@@ -52,8 +47,6 @@ const App = () => {
         global: "window",
       },
     });
-
-    //setCode(result.code);
 
     setCode(result.outputFiles[0].text);
   };
