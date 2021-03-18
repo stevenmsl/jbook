@@ -12,13 +12,15 @@ const App = () => {
   const startService = async () => {
     /*
        - copy the esbuild.wasm from the node_modules
-         to the public folder
+         to the public folder, or download it from
+         the unpkg.com
        - use useRef to check if the esbuild 
          is ready later
     */
     await esbuild.initialize({
       worker: true,
-      wasmURL: "/esbuild.wasm",
+      wasmURL: "https://unpkg.com/esbuild-wasm/esbuild.wasm",
+      //wasmURL: "/esbuild.wasm", // look at the public folder
     });
 
     ref.current = true;
