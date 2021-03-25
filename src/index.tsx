@@ -1,8 +1,10 @@
+import "bulmaswatch/superhero/bulmaswatch.min.css";
 import ReactDom from "react-dom";
 import { useState, useEffect, useRef } from "react";
 import * as esbuild from "esbuild-wasm";
 import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 import { fetchPlugin } from "./plugins/fetch-plugin";
+import CodeEditor from "./components/code-editor";
 
 const App = () => {
   const ref = useRef<any>();
@@ -113,8 +115,23 @@ const App = () => {
     - iframe will have its own context
   
   */
+
+  const initialValue = `const App = () => {
+    return (
+      <div>
+        <h1>Hi There</h1>
+        <button>Click Me</button>
+      </div>
+    );
+  };
+  `;
+
   return (
     <h1>
+      <CodeEditor
+        initialValue={initialValue}
+        onChange={(value) => setInput(value)}
+      />
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
