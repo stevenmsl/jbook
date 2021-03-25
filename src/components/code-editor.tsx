@@ -67,6 +67,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
     );
 
     highlighter.highLightOnDidChangeModelContent(100);
+    // to supress the excessive parsing errors logged in the console
+    highlighter.highlightCode(
+      undefined,
+      () => {},
+      undefined,
+      () => {}
+    );
   };
 
   const onFormatClick = () => {
@@ -115,7 +122,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
           fontSize: 16,
           scrollBeyondLastLine: false,
           automaticLayout: true,
-          tabSize: 2,
         }}
       />
     </div>
