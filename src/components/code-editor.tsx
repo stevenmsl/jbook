@@ -39,7 +39,11 @@ interface CodeEditorProps {
     value to the editor    
 */
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({
+  initialValue,
+  onChange,
+  children,
+}) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
   /*
     - get the value of the editor and then emit it
