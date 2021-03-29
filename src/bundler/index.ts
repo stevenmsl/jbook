@@ -25,23 +25,30 @@ const bundle = async (rawCode: string) => {
     });
     serviceReady = true;
   }
-  const result = await esbuild.build({
-    entryPoints: ["index.js"],
-    bundle: true,
-    write: false,
-    plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
-    /*
-      - deal with the warnnings when the packages
-        you are downloading need to access nodejs
-        environment variables
-    */
-    define: {
-      "process.env.NODE_ENV": '"production"',
-      global: "window",
-    },
-  });
+  try {
+    const result = await esbuild.build({
+      entryPoints: ["index.js"],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
+      /*
+        - deal with the warnnings when the packages
+          you are downloading need to access nodejs
+          environment variables
+      */
+      define: {
+        "process.env.NODE_ENV": '"production"',
+        global: "window",
+      },
+    });
 
-  return result.outputFiles[0].text;
+    return { code: result.outputFiles[0].text, err: "" };
+  } catch (err) {
+    return {
+      code: "",
+      err: err.message,
+    };
+  }
 };
 
 export default bundle;

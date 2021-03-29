@@ -49,7 +49,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     - get the value of the editor and then emit it
   */
   const handleEditorChange: OnChange = (value, event) => {
-    if (value) onChange(value);
+    console.log("about to emit the value:", value);
+    if (!value) value = "";
+    onChange(value);
   };
 
   /*

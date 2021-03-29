@@ -3,6 +3,7 @@ import { useRef, useEffect } from "react";
 
 interface PreviewProps {
   code: string;
+  err: string;
 }
 
 const html = `
@@ -13,14 +14,23 @@ const html = `
   <body>
     <div id="root"></div>
     <script>
+      const handleError = (err) => {
+        const root = document.querySelector('#root');
+        root.innerHTML = '<div style="color:  red;" ><h4>Runtime Error</h4>' + err + '</div>';
+        console.error('err:', err);
+      };
+
+      /* for async error  */
+      window.addEventListener('error', (event) => {
+        event.preventDefault();
+        handleError(event.error);
+      });
+
       window.addEventListener('message', (event) => {
         try {
-            //console.log('event.data:', event.data);
             eval(event.data);
           } catch (err) {
-            const root = document.querySelector('#root');
-            root.innerHTML = '<div style="color:  red;" ><h4>Runtime Error</h4>' + err + '</div>';
-            console.log('err:', err);
+            handleError(err);    
         } 
       }, false);
     </script>
@@ -42,7 +52,7 @@ const html = `
   
   */
 
-const Preview: React.FC<PreviewProps> = ({ code }) => {
+const Preview: React.FC<PreviewProps> = ({ code, err }) => {
   const iframe = useRef<any>();
 
   useEffect(() => {
@@ -66,9 +76,13 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
         maintain the security
       - iframe needs to setup the listener properly
         to receive the bundled code from the main
-        app 
+        app
     */
     setTimeout(() => {
+      /*
+        - Delay posting the message a bit so the newly 
+          loaded doc has a chance to receive the message
+      */
       iframe.current.contentWindow.postMessage(code, "*");
     }, 50);
   }, [code]);
@@ -81,6 +95,7 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
         sandbox="allow-scripts"
         srcDoc={html}
       />
+      {err && <div className="preview-error">{err}</div>}
     </div>
   );
 };
