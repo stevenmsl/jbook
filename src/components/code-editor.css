@@ -1,7 +1,11 @@
 .editor-wrapper {
   position: relative;
   height: 100%;
-  width: 100%;
+  /* 
+    - leave some room for the horizontal bar
+      so it can show next to the editor 
+  */
+  width: calc(100% - 10px);
 }
 
 .editor-wrapper .button-format {

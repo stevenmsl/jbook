@@ -5,6 +5,15 @@
   background-position: 50%;
 }
 
+.resize-horizontal {
+  display: flex;
+  /*
+    - to make sure the horizontal bar show
+      in the same row as the editor
+  */
+  flex-direction: row;
+}
+
 .react-resizable-handle-s {
   height: 10px;
   width: 100%;
