@@ -3,8 +3,11 @@ import { useTypedSelector } from "../hooks/use-typed-selector";
 import CellListItem from "./cell-list-item";
 import AddCell from "./add-cell";
 /*
-  design decision - why put the AddCell here not in CellLisItem
-  - we need to show an extra AddCell at the very end of the list 
+  design decisions 
+  - why add AddCell here not in CellLisItem
+    - we are showing an extra AddCell at the 
+      very end of the list, which means we need
+      to render it separately in this case       
 */
 
 const CellList: React.FC = () => {
