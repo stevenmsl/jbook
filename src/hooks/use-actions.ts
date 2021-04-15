@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../state";
@@ -16,6 +17,19 @@ import { actionCreators } from "../state";
 
 export const useActions = () => {
   const dispatch = useDispatch();
-
-  return bindActionCreators(actionCreators, dispatch);
+  /*
+    useMemo
+      - return the same function in the same 
+        memory location
+      - this will make sure a re-render will 
+        not be trigger for the components
+        who need to put the action creators
+        in a dependency array
+      - you don't need to specify the actionCreators
+        in the dependency array as it's coming from
+        the import statements   
+  */
+  return useMemo(() => {
+    return bindActionCreators(actionCreators, dispatch);
+  }, [dispatch]);
 };
