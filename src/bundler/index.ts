@@ -40,6 +40,12 @@ const bundle = async (rawCode: string) => {
         "process.env.NODE_ENV": '"production"',
         global: "window",
       },
+      /*
+        - avoid name collisions
+        - check the comments in the code-cell.tsx
+      */
+      jsxFactory: "_React.createElement",
+      jsxFragment: "_React.Fragment",
     });
 
     return { code: result.outputFiles[0].text, err: "" };
